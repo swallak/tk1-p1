@@ -1,3 +1,0 @@
-grant codeBase "~/Documents/TK1/Exercices/Practical/tk1-p1/fly-hunt/src/client/" {
-    permission java.security.AllPermission;
-};
