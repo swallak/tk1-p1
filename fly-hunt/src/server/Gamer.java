@@ -5,11 +5,13 @@
  */
 package server;
 
+import java.io.Serializable;
+
 /**
  *
  * @author swallak
  */
-public class Gamer {
+public class Gamer implements Serializable {
     
     private String userName;
     private int score;
@@ -17,6 +19,7 @@ public class Gamer {
     public Gamer (String userName)
     {
         this.userName = userName;
+        this.score = 0;
     }
     
     public void incrScore()

@@ -5,6 +5,7 @@
  */
 package server;
 
+import java.io.Serializable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -12,7 +13,7 @@ import java.util.logging.Logger;
  *
  * @author swallak
  */
-public class Position {
+public class Position implements Serializable{
 
     private int posX;
     private int posY;

@@ -8,14 +8,17 @@ package server;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import client.Client;
+import java.util.Collection;
 /**
  *
  * @author swallak
  */
 public interface IGameSever extends Remote{
     
-    boolean login (String userName, Client client) throws RemoteException;
+    boolean login (String userName) throws RemoteException;
     boolean logout (String userName)throws RemoteException;
     void huntFly (String userName)throws RemoteException;
+    Gamer[] getGamers() throws RemoteException;
+    Position getFlyPosition() throws RemoteException;
     
 }

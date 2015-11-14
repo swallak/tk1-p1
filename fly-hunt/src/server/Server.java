@@ -12,6 +12,7 @@ import java.util.Random;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.Collection;
 
 /**
  *
@@ -21,17 +22,16 @@ public class Server implements IGameSever {
 
     private HashMap<String, Gamer> connectedGamers; // Synchronitation issuses ??
     private Fly fly;
-    private String hostName;
+    public final static String name = "SERVER";
 
-    private Server(String hostName) {
+    private Server() {
         super();
         connectedGamers = new HashMap<>();
         //Generation initial random position
         Random random = new Random();
         int x = random.nextInt();
         int y = random.nextInt();
-        fly = new Fly(x, y);
-        this.hostName = hostName;
+        fly = new Fly(Math.abs(x), Math.abs(y));
 
     }
 
@@ -45,12 +45,11 @@ public class Server implements IGameSever {
             System.setSecurityManager(new SecurityManager());
         }
         try {
-            String hostName = "";
-            IGameSever server = new Server(hostName);
-            IGameSever stub = (Server) UnicastRemoteObject.exportObject(server, 0);
+            IGameSever server = new Server();
+            IGameSever stub = (IGameSever) UnicastRemoteObject.exportObject(server, 0);
 
             Registry reg = LocateRegistry.getRegistry();
-            reg.rebind(hostName, stub);
+            reg.rebind(Server.name, stub);
             System.out.println("Server is running");
         } catch (RemoteException ex) {
             System.out.println("server.Server.main()");;
@@ -59,8 +58,19 @@ public class Server implements IGameSever {
     }
 
     @Override
-    public boolean login(String userName, Client client) throws RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public boolean login(String userName) throws RemoteException {
+        boolean result = connectedGamers.containsKey(userName);
+        if (result)
+        {
+            System.out.println("An existing user is trying to connect");
+        }
+        else
+        {
+            System.out.println("new User "+userName+" has been added");
+            Gamer g = new Gamer(userName);
+            connectedGamers.put(userName, g);
+        }
+        return !result;
     }
 
     @Override
@@ -82,6 +92,16 @@ public class Server implements IGameSever {
         g.incrScore();
         connectedGamers.put(userName, g);
 
+    }
+
+    @Override
+    public Gamer[] getGamers() throws RemoteException {
+        return (Gamer[])connectedGamers.values().toArray();
+    }
+
+    @Override
+    public Position getFlyPosition() throws RemoteException {
+        return new Position(fly.getposX(), fly.getposX());
     }
 
 }

@@ -5,6 +5,8 @@
  */
 package client;
 
+import java.awt.Color;
+
 /**
  *
  * @author swallak
@@ -15,10 +17,15 @@ public class ClientViewer extends javax.swing.JFrame {
     /**
      * Creates new form ClientViewer
      */
+    public ClientViewer(String serverHostName) {
+        initComponents();
+        client = new Client(serverHostName);
+        
+    }
     public ClientViewer() {
         initComponents();
+        
     }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -28,75 +35,21 @@ public class ClientViewer extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        loginScreen = new javax.swing.JPanel();
-        userNameField = new javax.swing.JTextField();
-        okButton = new javax.swing.JButton();
-
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        userNameField.setText("username");
-        userNameField.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                userNameFieldMouseClicked(evt);
-            }
-        });
-
-        okButton.setText("OK");
-        okButton.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                okButtonMousePressed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout loginScreenLayout = new javax.swing.GroupLayout(loginScreen);
-        loginScreen.setLayout(loginScreenLayout);
-        loginScreenLayout.setHorizontalGroup(
-            loginScreenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(loginScreenLayout.createSequentialGroup()
-                .addGap(206, 206, 206)
-                .addComponent(userNameField, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(okButton)
-                .addContainerGap(220, Short.MAX_VALUE))
-        );
-        loginScreenLayout.setVerticalGroup(
-            loginScreenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(loginScreenLayout.createSequentialGroup()
-                .addGap(192, 192, 192)
-                .addGroup(loginScreenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(okButton)
-                    .addComponent(userNameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(207, Short.MAX_VALUE))
-        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(loginScreen, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+            .addGap(0, 624, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(loginScreen, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+            .addGap(0, 453, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void userNameFieldMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_userNameFieldMouseClicked
-
-        userNameField.setText("");
-    }//GEN-LAST:event_userNameFieldMouseClicked
-
-    private void okButtonMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_okButtonMousePressed
-        this.loginScreen.setVisible(false);
-    }//GEN-LAST:event_okButtonMousePressed
 
     /**
      * @param args the command line arguments
@@ -125,17 +78,16 @@ public class ClientViewer extends javax.swing.JFrame {
         }
         //</editor-fold>
 
+        
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
+                //new ClientViewer(args[0]).setVisible(true);
                 new ClientViewer().setVisible(true);
             }
         });
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel loginScreen;
-    private javax.swing.JButton okButton;
-    private javax.swing.JTextField userNameField;
     // End of variables declaration//GEN-END:variables
 }
