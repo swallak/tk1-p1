@@ -5,22 +5,25 @@
  */
 package server;
 
-import client.IGameClient;
+import client.Client;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.Random;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
 
 /**
  *
  * @author swallak
  */
-public class Server implements IGameSever{
-    
-    private HashMap<Gamer,Integer> connectedGamers; // Synchronitation issuses ??
+public class Server implements IGameSever {
+
+    private HashMap<String, Gamer> connectedGamers; // Synchronitation issuses ??
     private Fly fly;
     private String hostName;
-    private Server(String hostName)
-    {
+
+    private Server(String hostName) {
         super();
         connectedGamers = new HashMap<>();
         //Generation initial random position
@@ -29,29 +32,56 @@ public class Server implements IGameSever{
         int y = random.nextInt();
         fly = new Fly(x, y);
         this.hostName = hostName;
-        
+
     }
-    
+
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+
+        // Setting the security manager
+        if (System.getSecurityManager() == null) {
+            System.setSecurityManager(new SecurityManager());
+        }
+        try {
+            String hostName = "";
+            IGameSever server = new Server(hostName);
+            IGameSever stub = (Server) UnicastRemoteObject.exportObject(server, 0);
+
+            Registry reg = LocateRegistry.getRegistry();
+            reg.rebind(hostName, stub);
+            System.out.println("Server is running");
+        } catch (RemoteException ex) {
+            System.out.println("server.Server.main()");;
+        }
+
     }
 
     @Override
-    public boolean login(String userName, IGameClient client) throws RemoteException {
+    public boolean login(String userName, Client client) throws RemoteException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void logout(String userName) throws RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public boolean logout(String userName) throws RemoteException {
+
+        Gamer g = connectedGamers.remove(userName);
+        if (g == null) {
+            return false;
+        } else {
+            return true;
+        }
+
     }
 
     @Override
     public void huntFly(String userName) throws RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.fly.changePosition();
+        Gamer g = connectedGamers.get(userName);
+        g.incrScore();
+        connectedGamers.put(userName, g);
+
     }
-    
+
 }

@@ -5,6 +5,7 @@
  */
 package server;
 
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -20,7 +21,7 @@ public class Fly {
         this.pos = new Position(x, y);
     }
 
-    public void setPosittion(int x, int y) {
+    public void setPosition(int x, int y) {
         try {
             pos.setPosition(x, y);
         } catch (PositionInvalidException ex) {
@@ -35,6 +36,13 @@ public class Fly {
     public int getPosY()
     {
         return pos.getPosY();
+    }
+    public void changePosition()
+    {
+        Random r = new Random();
+        int x = r.nextInt();
+        int y = r.nextInt();
+        this.setPosition(Math.abs(x), Math.abs(y));
     }
 
 }

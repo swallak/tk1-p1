@@ -4,14 +4,15 @@
  * and open the template in the editor.
  */
 package client;
-import server.Position;
 
 /**
  *
  * @author swallak
  */
-public interface IGameClient {
+public class Client extends AbstractSubject {
+
+    private String myUserName;
+    private int myScore;
     
-    void receiveFlyPosition(Position p);
-    
+
 }

@@ -11,15 +11,12 @@ package server;
  */
 public class Gamer {
     
-    private String address;
     private String userName;
     private int score;
     
-    public Gamer (String address, String userName)
+    public Gamer (String userName)
     {
-        this.address=address;
-        this.userName=userName;
-        this.score = 0;
+        this.userName = userName;
     }
     
     public void incrScore()
@@ -30,10 +27,6 @@ public class Gamer {
     public int getScore()
     {
         return this.score;
-    }
-    public String getAddress ()
-    {
-        return this.address;
     }
     public String getUserName ()
     {
