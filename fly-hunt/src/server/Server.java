@@ -90,7 +90,6 @@ public class Server implements IGameSever {
 
     @Override
     public void huntFly(String userName) throws RemoteException {
-        this.fly.changePosition();
         Gamer g = connectedGamers.get(userName);
         g.incrScore();
         connectedGamers.put(userName, g);
