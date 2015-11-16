@@ -7,19 +7,23 @@ package server;
 
 import java.io.Serializable;
 import java.util.Random;
+import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.Timer;
 
 /**
  *
  * @author swallak
  */
-public class Fly implements Serializable {
+public class Fly extends TimerTask implements Serializable{
 
     private Position pos;
 
-    Fly(int x, int y) {
+    public Fly(int x, int y) {
         this.pos = new Position(x, y);
+        Timer t = new Timer();
+        t.schedule(this, 0, 1000);
     }
 
     public void setPosition(int x, int y) {
@@ -50,6 +54,11 @@ public class Fly implements Serializable {
     public String toString()
     {
         return "("+pos.getPosX()+","+pos.getPosY()+")";
+    }
+
+    @Override
+    public void run() {
+        this.changePosition();
     }
 
 }
