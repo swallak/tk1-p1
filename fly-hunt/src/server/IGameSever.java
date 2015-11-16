@@ -18,7 +18,7 @@ public interface IGameSever extends Remote{
     boolean login (String userName) throws RemoteException;
     boolean logout (String userName)throws RemoteException;
     void huntFly (String userName)throws RemoteException;
-    Gamer[] getGamers() throws RemoteException;
+    Object[] getGamers() throws RemoteException;
     Position getFlyPosition() throws RemoteException;
     
 }

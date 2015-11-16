@@ -5,7 +5,6 @@
  */
 package server;
 
-import client.Client;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.Random;
@@ -13,6 +12,9 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Collection;
+import java.util.Iterator;
+import java.util.Map;
+import javax.swing.text.html.HTMLDocument;
 
 /**
  *
@@ -50,10 +52,11 @@ public class Server implements IGameSever {
 
             Registry reg = LocateRegistry.getRegistry();
             reg.rebind(Server.name, stub);
-            System.out.println("Server is running");
         } catch (RemoteException ex) {
-            System.out.println("server.Server.main()");;
+            System.out.println("Remote exeption");
+            ex.printStackTrace();
         }
+        System.out.println("Server is running");
 
     }
 
@@ -95,8 +98,13 @@ public class Server implements IGameSever {
     }
 
     @Override
-    public Gamer[] getGamers() throws RemoteException {
-        return (Gamer[])connectedGamers.values().toArray();
+    public Object[] getGamers() throws RemoteException {
+        
+        Object[] gamers =  new Object[connectedGamers.size()];
+        //gamers[0]=connectedGamers.get("swallak");
+        gamers = connectedGamers.values().toArray();
+        return gamers;
+        //return (Gamer[])connectedGamers.values().toArray();
     }
 
     @Override

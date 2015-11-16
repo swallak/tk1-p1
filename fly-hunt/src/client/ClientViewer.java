@@ -35,17 +35,75 @@ public class ClientViewer extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        connectPanel = new javax.swing.JPanel();
+        userNameField = new javax.swing.JTextField();
+        loginButton = new javax.swing.JButton();
+        playPanel = new javax.swing.JLayeredPane();
+        gamerPanel = new javax.swing.JScrollPane();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
+
+        userNameField.setText("username");
+
+        loginButton.setText("login");
+
+        javax.swing.GroupLayout connectPanelLayout = new javax.swing.GroupLayout(connectPanel);
+        connectPanel.setLayout(connectPanelLayout);
+        connectPanelLayout.setHorizontalGroup(
+            connectPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(connectPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(connectPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(userNameField, javax.swing.GroupLayout.DEFAULT_SIZE, 136, Short.MAX_VALUE)
+                    .addComponent(loginButton))
+                .addContainerGap())
+        );
+        connectPanelLayout.setVerticalGroup(
+            connectPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(connectPanelLayout.createSequentialGroup()
+                .addGap(40, 40, 40)
+                .addComponent(userNameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(loginButton)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout playPanelLayout = new javax.swing.GroupLayout(playPanel);
+        playPanel.setLayout(playPanelLayout);
+        playPanelLayout.setHorizontalGroup(
+            playPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 422, Short.MAX_VALUE)
+        );
+        playPanelLayout.setVerticalGroup(
+            playPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 624, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(connectPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(gamerPanel))
+                .addGap(18, 18, 18)
+                .addComponent(playPanel)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 453, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(playPanel)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(connectPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(gamerPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 266, Short.MAX_VALUE)))
+                .addContainerGap())
         );
 
         pack();
@@ -89,5 +147,10 @@ public class ClientViewer extends javax.swing.JFrame {
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel connectPanel;
+    private javax.swing.JScrollPane gamerPanel;
+    private javax.swing.JButton loginButton;
+    private javax.swing.JLayeredPane playPanel;
+    private javax.swing.JTextField userNameField;
     // End of variables declaration//GEN-END:variables
 }

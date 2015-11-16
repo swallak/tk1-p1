@@ -13,6 +13,7 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import server.Gamer;
 import server.IGameSever;
 /**
  *
@@ -27,7 +28,7 @@ public class Client {
     public Client(String serverHostName) {
         try {
             Registry reg = LocateRegistry.getRegistry(serverHostName);
-            server = (Server) reg.lookup(Server.name);
+            server = (IGameSever) reg.lookup(Server.name);
         } catch (RemoteException ex) {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         } catch (NotBoundException ex) {
@@ -68,6 +69,19 @@ public class Client {
         return this.myScore;
     }
     
+    public Object[] getGamers()
+    {
+        Object[] gamers=null;
+        try {
+            gamers = server.getGamers();
+        } catch (RemoteException ex) {
+            System.err.println("Remote exception getGamers");
+            ex.printStackTrace();
+            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return gamers;
+    }
+    
     public static void main (String[] args){
         
         // Setting the security manager for the client
@@ -79,9 +93,19 @@ public class Client {
 //        //Connecting the client
 //        //args[0] is the server host name for the rmi registry
         Client client = new Client("localhost");
-        client.setMyUserName(args[1]);
+        client.setMyUserName(args[0]);
         boolean connection = client.connect();
+        if(connection)
+            System.out.println("success");
+        else
+            System.out.println("Fail");
         
+        Object[] gamers = client.getGamers();
+        
+        for (Object g : gamers)
+        {
+            System.out.println(g);
+        }
     }
 
 }
