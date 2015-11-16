@@ -48,7 +48,7 @@ public class Gamer implements Serializable {
     @Override
     public String toString()
     {
-        return userName +" "+ score;
+        return userName +": "+ score;
     }
     
 }
