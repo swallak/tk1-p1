@@ -152,40 +152,38 @@ public class Client extends TimerTask {
 
     }
     
-    public static void main(String[] args) {
-
-        // Setting the security manager for the client
-        if (System.getSecurityManager() == null) {
-            System.setSecurityManager(new SecurityManager());
-        }
-        System.out.println("Hallo!!");
-//        //Connecting the client
-//        //args[0] is the server host name for the rmi registry
-        Client client = new Client("localhost");
-        client.setMyUserName(args[0]);
-        boolean connection = client.connect();
-        if (connection) {
-            System.out.println("success");
-        } else {
-            System.out.println("Fail");
-        }
-
-        Position pos = client.getFlyPosition();
-        System.out.println(pos);
-        try {
-            client.server.huntFly(args[0]);
-        } catch (RemoteException ex) {
-            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        Object[] gamers = client.getGamers();
-
-        for (Object g : gamers) {
-            System.out.println(g);
-        }
-        pos = client.getFlyPosition();
-        System.out.println(pos);
-    }
-
-
-
+//    public static void main(String[] args) {
+//
+//        // Setting the security manager for the client
+//        if (System.getSecurityManager() == null) {
+//            System.setSecurityManager(new SecurityManager());
+//        }
+//        System.out.println("Hallo!!");
+////        //Connecting the client
+////        //args[0] is the server host name for the rmi registry
+//        Client client = new Client("localhost");
+//        client.setMyUserName(args[0]);
+//        boolean connection = client.connect();
+//        if (connection) {
+//            System.out.println("success");
+//        } else {
+//            System.out.println("Fail");
+//        }
+//
+//        Position pos = client.getFlyPosition();
+//        System.out.println(pos);
+//        try {
+//            client.server.huntFly(args[0]);
+//        } catch (RemoteException ex) {
+//            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        Object[] gamers = client.getGamers();
+//
+//        for (Object g : gamers) {
+//            System.out.println(g);
+//        }
+//        pos = client.getFlyPosition();
+//        System.out.println(pos);
+//    }
+//
 }
