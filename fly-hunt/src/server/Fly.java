@@ -40,10 +40,16 @@ public class Fly implements Serializable {
     }
     public void changePosition()
     {
-        Random r = new Random();
-        int x = r.nextInt();
-        int y = r.nextInt();
+        Random r1 = new Random();
+        Random r2 = new Random();
+        int x = r1.nextInt();
+        int y = r2.nextInt();
         this.setPosition(Math.abs(x), Math.abs(y));
+    }
+    @Override
+    public String toString()
+    {
+        return "("+pos.getPosX()+","+pos.getPosY()+")";
     }
 
 }

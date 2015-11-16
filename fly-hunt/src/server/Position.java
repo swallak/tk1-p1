@@ -45,6 +45,11 @@ public class Position implements Serializable{
     {
         return this.posY;
     }
+    @Override
+    public String toString()
+    {
+        return "("+posX+","+posY+")";
+    }
 
 }
 

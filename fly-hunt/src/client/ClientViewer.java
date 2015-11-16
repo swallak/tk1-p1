@@ -45,8 +45,18 @@ public class ClientViewer extends javax.swing.JFrame {
         setResizable(false);
 
         userNameField.setText("username");
+        userNameField.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                userNameFieldMousePressed(evt);
+            }
+        });
 
         loginButton.setText("login");
+        loginButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                loginButtonMousePressed(evt);
+            }
+        });
 
         javax.swing.GroupLayout connectPanelLayout = new javax.swing.GroupLayout(connectPanel);
         connectPanel.setLayout(connectPanelLayout);
@@ -108,6 +118,48 @@ public class ClientViewer extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void userNameFieldMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_userNameFieldMousePressed
+        //Remove text whenc clicking
+        userNameField.setText("");
+    }//GEN-LAST:event_userNameFieldMousePressed
+
+    private void loginButtonMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_loginButtonMousePressed
+        // Connection Handeler
+        if("login".equals(loginButton.getText()))
+        {
+            client.setMyUserName(userNameField.getText());
+            System.out.println("Connection username:"+userNameField.getText());
+            boolean status = client.connect();
+            //Success full connection.
+            if(status)
+            {
+                loginButton.setText("logout");
+                System.out.println("Login succesful");
+                userNameField.setVisible(false);
+            }
+            //Failure to connect
+            else
+            {
+                System.out.println("Connection failure; Username already used");
+                userNameField.setForeground(Color.red);
+                userNameField.setText("username is used");
+            }
+        }
+        if ("logout".equals(loginButton.getText())) {
+            System.out.println("Disconnecting " + client.getMyUserName());
+            boolean status = client.disconnect();
+            if (status) {
+                System.out.println("logout successful");
+                userNameField.setText("username");
+                userNameField.setForeground(Color.GRAY);
+                userNameField.setVisible(true);
+                loginButton.setText("login");
+            } else {
+                System.out.println("logout failed");
+            }
+        }
+    }//GEN-LAST:event_loginButtonMousePressed
 
     /**
      * @param args the command line arguments

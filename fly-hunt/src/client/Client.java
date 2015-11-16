@@ -48,6 +48,18 @@ public class Client {
         }
         return result;
     }
+    
+    public boolean disconnect()
+    {
+        boolean result =false;
+        try {
+            result = server.logout(myUserName);
+        } catch (RemoteException ex) {
+            System.out.println("login out...");
+            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return result;
+    }
     public Position getFlyPosition()
     {
         Position pos = null;
@@ -63,6 +75,10 @@ public class Client {
     public void setMyUserName (String myName)
     {
         this.myUserName = myName;
+    }
+    public String getMyUserName()
+    {
+        return this.myUserName;
     }
     public int getMyScore()
     {
@@ -100,12 +116,23 @@ public class Client {
         else
             System.out.println("Fail");
         
+
+        
+        Position pos = client.getFlyPosition();
+        System.out.println(pos);
+        try {
+            client.server.huntFly(args[0]);
+        } catch (RemoteException ex) {
+            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+        }
         Object[] gamers = client.getGamers();
         
         for (Object g : gamers)
         {
             System.out.println(g);
         }
+        pos=client.getFlyPosition();
+        System.out.println(pos);
     }
 
 }
