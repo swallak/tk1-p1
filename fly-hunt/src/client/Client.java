@@ -11,6 +11,8 @@ import server.Position;
 import server.Server;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import server.Gamer;
@@ -19,12 +21,18 @@ import server.IGameSever;
  *
  * @author swallak
  */
-public class Client {
+public class Client extends TimerTask {
 
     private String myUserName;
     private int myScore;
     private IGameSever server;
-
+    
+    public boolean connected;
+    public Object[] gamers;
+    public Position fly;
+    
+    private Timer T;
+    
     public Client(String serverHostName) {
         try {
             Registry reg = LocateRegistry.getRegistry(serverHostName);
@@ -60,7 +68,7 @@ public class Client {
         }
         return result;
     }
-    public Position getFlyPosition()
+    private Position getFlyPosition()
     {
         Position pos = null;
         
@@ -85,7 +93,7 @@ public class Client {
         return this.myScore;
     }
     
-    public Object[] getGamers()
+    private Object[] getGamers()
     {
         Object[] gamers=null;
         try {
@@ -110,11 +118,44 @@ public class Client {
         }
     }
     
-    public static void main (String[] args){
+    
+    @Override
+    public void run() {
         
+            gamers = getGamers();
+            fly = getFlyPosition();
+            //System.out.println(fly);
+            
+    }
+    
+    public void start()
+    {
+        if (connected) {
+            System.out.println("Starting the client...");
+            T = new Timer();
+            T.schedule(this, 0, 500);
+        } else {
+            System.out.println("Client not connected: Cannot start");
+        }
+
+    }
+    
+    public void stop() {
+        if (connected) {
+            System.out.println("Stopping the client...");
+            T.cancel();
+            T=null;
+            System.out.println("Client stopped");
+        } else {
+            System.out.println("Client not connected: Cannot Stop");
+        }
+
+    }
+    
+    public static void main(String[] args) {
+
         // Setting the security manager for the client
-        if(System.getSecurityManager() == null)
-        {
+        if (System.getSecurityManager() == null) {
             System.setSecurityManager(new SecurityManager());
         }
         System.out.println("Hallo!!");
@@ -123,13 +164,12 @@ public class Client {
         Client client = new Client("localhost");
         client.setMyUserName(args[0]);
         boolean connection = client.connect();
-        if(connection)
+        if (connection) {
             System.out.println("success");
-        else
+        } else {
             System.out.println("Fail");
-        
+        }
 
-        
         Position pos = client.getFlyPosition();
         System.out.println(pos);
         try {
@@ -138,13 +178,14 @@ public class Client {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }
         Object[] gamers = client.getGamers();
-        
-        for (Object g : gamers)
-        {
+
+        for (Object g : gamers) {
             System.out.println(g);
         }
-        pos=client.getFlyPosition();
+        pos = client.getFlyPosition();
         System.out.println(pos);
     }
+
+
 
 }

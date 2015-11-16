@@ -15,19 +15,17 @@ import server.Position;
 public class ClientViewer extends javax.swing.JFrame {
 
     Client client;
-    boolean connected;
+    Thread updateFlyPositionT;
+    Thread updateGamersT;
     /**
      * Creates new form ClientViewer
      */
-    public ClientViewer(String serverHostName) {
-        initComponents();
-        client = new Client(serverHostName);
-        connected = false;
-//        for (Object g : client.getGamers()) {
-//            System.out.println(g);
-//        }
-
-    }
+//    public ClientViewer(String serverHostName) {
+//        initComponents();
+//        client = new Client(serverHostName);
+//        client.connected = false;
+//        fly.setVisible(false);
+//    }
 
     public ClientViewer() {
         initComponents();
@@ -160,6 +158,7 @@ public class ClientViewer extends javax.swing.JFrame {
     private void loginButtonMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_loginButtonMousePressed
         // Connection Handeler
         if ("login".equals(loginButton.getText())) {
+            client = new Client("localhost");
             client.setMyUserName(userNameField.getText());
             System.out.println("Connection username:" + userNameField.getText());
             boolean status = client.connect();
@@ -168,7 +167,10 @@ public class ClientViewer extends javax.swing.JFrame {
                 loginButton.setText("logout");
                 System.out.println("Login succesful");
                 userNameField.setVisible(false);
-                connected=true;
+                fly.setVisible(true);
+                client.connected=true;
+                client.start();
+                startViewer();
             } //Failure to connect
             else {
                 System.out.println("Connection failure; Username already used");
@@ -184,7 +186,9 @@ public class ClientViewer extends javax.swing.JFrame {
                 userNameField.setForeground(Color.GRAY);
                 userNameField.setVisible(true);
                 loginButton.setText("login");
-                connected=false;
+                fly.setVisible(false);
+                client.stop();
+                client = null;
             } else {
                 System.out.println("logout failed");
             }
@@ -192,13 +196,7 @@ public class ClientViewer extends javax.swing.JFrame {
     }//GEN-LAST:event_loginButtonMousePressed
 
     private void flyMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_flyMousePressed
-        // TODO add your handling code here:
         client.huntFly();
-        Position pos = client.getFlyPosition();
-        System.out.println(pos);
-        int x = pos.getPosX()%playPanel.getWidth();
-        int y = pos.getPosY()%playPanel.getHeight();
-        fly.setLocation(x, y);
     }//GEN-LAST:event_flyMousePressed
 
     /**
@@ -235,25 +233,48 @@ public class ClientViewer extends javax.swing.JFrame {
 //                new ClientViewer("localhost").setVisible(true);
 //            }
 //        });
-        ClientViewer viewer = new ClientViewer("localhost");
+        ClientViewer viewer = new ClientViewer();
         viewer.setVisible(true);
-        
-//        Runnable flyThread = new Runnable() {
-//            @Override
-//            public void run() {
-//                while(viewer.client!=null && viewer.connected)
-//                {
-//                    Position pos = viewer.client.getFlyPosition();
-//                    viewer.fly.setLocation(pos.getPosX()%viewer.playPanel.getWidth(),pos.getPosY()%viewer.playPanel.getHeight());
-//                    System.out.println(pos);
-//                }
-//                    
-//            }
-//        };
-//        
-//        Thread t1 = new Thread(flyThread);
-//        t1.start();
 
+        
+        
+
+//        while (true) {
+//            Position pos = viewer.client.getFlyPosition();
+//            viewer.fly.setLocation(pos.getPosX() % viewer.playPanel.getWidth(), pos.getPosY() % viewer.playPanel.getHeight());
+//            System.out.println(pos);
+//        }
+
+    }
+    public void startViewer() {
+        if (client != null) {
+            updateFlyPositionT = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    System.out.println("Starting thread for updating fly position");
+                    int x = 0, y = 0;
+                    while (true && client!=null) {
+                        if(client.fly != null)
+                        {
+                        x = client.fly.getPosX() % (playPanel.getWidth() - 40);
+                        y = client.fly.getPosY() % (playPanel.getHeight() - 40);                           
+                        }
+
+                        fly.setLocation(x, y);
+                    }
+
+                }
+            });
+            updateFlyPositionT.start();
+            
+            updateGamersT = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    System.out.println("Starting thread for updating connected gamers");
+                }
+            });
+            updateGamersT.start();
+        }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
