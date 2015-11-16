@@ -6,6 +6,7 @@
 package client;
 
 import java.awt.Color;
+import server.Position;
 
 /**
  *
@@ -14,18 +15,25 @@ import java.awt.Color;
 public class ClientViewer extends javax.swing.JFrame {
 
     Client client;
+    boolean connected;
     /**
      * Creates new form ClientViewer
      */
     public ClientViewer(String serverHostName) {
         initComponents();
         client = new Client(serverHostName);
-        
+        connected = false;
+//        for (Object g : client.getGamers()) {
+//            System.out.println(g);
+//        }
+
     }
+
     public ClientViewer() {
         initComponents();
-        
+
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -39,10 +47,15 @@ public class ClientViewer extends javax.swing.JFrame {
         userNameField = new javax.swing.JTextField();
         loginButton = new javax.swing.JButton();
         playPanel = new javax.swing.JLayeredPane();
+        fly = new javax.swing.JLabel();
         gamerPanel = new javax.swing.JScrollPane();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
+
+        connectPanel.setMaximumSize(new java.awt.Dimension(160, 124));
+        connectPanel.setMinimumSize(new java.awt.Dimension(160, 124));
+        connectPanel.setName(""); // NOI18N
 
         userNameField.setText("username");
         userNameField.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -72,23 +85,43 @@ public class ClientViewer extends javax.swing.JFrame {
         connectPanelLayout.setVerticalGroup(
             connectPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(connectPanelLayout.createSequentialGroup()
-                .addGap(40, 40, 40)
+                .addContainerGap()
                 .addComponent(userNameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(loginButton)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        fly.setIcon(new javax.swing.ImageIcon(getClass().getResource("/client/fly-icon.png"))); // NOI18N
+        fly.setPreferredSize(new java.awt.Dimension(40, 40));
+        fly.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                flyMousePressed(evt);
+            }
+        });
+
+        playPanel.setLayer(fly, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
         javax.swing.GroupLayout playPanelLayout = new javax.swing.GroupLayout(playPanel);
         playPanel.setLayout(playPanelLayout);
         playPanelLayout.setHorizontalGroup(
             playPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 422, Short.MAX_VALUE)
+            .addGroup(playPanelLayout.createSequentialGroup()
+                .addGap(185, 185, 185)
+                .addComponent(fly, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(197, Short.MAX_VALUE))
         );
         playPanelLayout.setVerticalGroup(
             playPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGroup(playPanelLayout.createSequentialGroup()
+                .addGap(152, 152, 152)
+                .addComponent(fly, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        gamerPanel.setMaximumSize(new java.awt.Dimension(160, 250));
+        gamerPanel.setMinimumSize(new java.awt.Dimension(160, 250));
+        gamerPanel.setPreferredSize(new java.awt.Dimension(160, 250));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -98,7 +131,7 @@ public class ClientViewer extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(connectPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(gamerPanel))
+                    .addComponent(gamerPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
                 .addComponent(playPanel)
                 .addContainerGap())
@@ -111,8 +144,8 @@ public class ClientViewer extends javax.swing.JFrame {
                     .addComponent(playPanel)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(connectPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(gamerPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 266, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(gamerPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 306, Short.MAX_VALUE)))
                 .addContainerGap())
         );
 
@@ -126,27 +159,23 @@ public class ClientViewer extends javax.swing.JFrame {
 
     private void loginButtonMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_loginButtonMousePressed
         // Connection Handeler
-        if("login".equals(loginButton.getText()))
-        {
+        if ("login".equals(loginButton.getText())) {
             client.setMyUserName(userNameField.getText());
-            System.out.println("Connection username:"+userNameField.getText());
+            System.out.println("Connection username:" + userNameField.getText());
             boolean status = client.connect();
             //Success full connection.
-            if(status)
-            {
+            if (status) {
                 loginButton.setText("logout");
                 System.out.println("Login succesful");
                 userNameField.setVisible(false);
-            }
-            //Failure to connect
-            else
-            {
+                connected=true;
+            } //Failure to connect
+            else {
                 System.out.println("Connection failure; Username already used");
                 userNameField.setForeground(Color.red);
                 userNameField.setText("username is used");
             }
-        }
-        if ("logout".equals(loginButton.getText())) {
+        } else {
             System.out.println("Disconnecting " + client.getMyUserName());
             boolean status = client.disconnect();
             if (status) {
@@ -155,11 +184,22 @@ public class ClientViewer extends javax.swing.JFrame {
                 userNameField.setForeground(Color.GRAY);
                 userNameField.setVisible(true);
                 loginButton.setText("login");
+                connected=false;
             } else {
                 System.out.println("logout failed");
             }
         }
     }//GEN-LAST:event_loginButtonMousePressed
+
+    private void flyMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_flyMousePressed
+        // TODO add your handling code here:
+        client.huntFly();
+        Position pos = client.getFlyPosition();
+        System.out.println(pos);
+        int x = pos.getPosX()%playPanel.getWidth();
+        int y = pos.getPosY()%playPanel.getHeight();
+        fly.setLocation(x, y);
+    }//GEN-LAST:event_flyMousePressed
 
     /**
      * @param args the command line arguments
@@ -188,18 +228,37 @@ public class ClientViewer extends javax.swing.JFrame {
         }
         //</editor-fold>
 
-        
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                //new ClientViewer(args[0]).setVisible(true);
-                new ClientViewer().setVisible(true);
-            }
-        });
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            public void run() {
+//                //new ClientViewer(args[0]).setVisible(true);
+//                new ClientViewer("localhost").setVisible(true);
+//            }
+//        });
+        ClientViewer viewer = new ClientViewer("localhost");
+        viewer.setVisible(true);
+        
+//        Runnable flyThread = new Runnable() {
+//            @Override
+//            public void run() {
+//                while(viewer.client!=null && viewer.connected)
+//                {
+//                    Position pos = viewer.client.getFlyPosition();
+//                    viewer.fly.setLocation(pos.getPosX()%viewer.playPanel.getWidth(),pos.getPosY()%viewer.playPanel.getHeight());
+//                    System.out.println(pos);
+//                }
+//                    
+//            }
+//        };
+//        
+//        Thread t1 = new Thread(flyThread);
+//        t1.start();
+
     }
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel connectPanel;
+    private javax.swing.JLabel fly;
     private javax.swing.JScrollPane gamerPanel;
     private javax.swing.JButton loginButton;
     private javax.swing.JLayeredPane playPanel;

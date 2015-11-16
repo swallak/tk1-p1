@@ -98,6 +98,18 @@ public class Client {
         return gamers;
     }
     
+    public void huntFly()
+    {
+        try {
+            server.huntFly(myUserName);
+            myScore++;
+            System.out.println("Flyhunted--MyScore="+myScore);
+        } catch (RemoteException ex) {
+            System.out.println("Remote exception huntfly");
+            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     public static void main (String[] args){
         
         // Setting the security manager for the client
