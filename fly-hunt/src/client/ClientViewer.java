@@ -163,23 +163,30 @@ public class ClientViewer extends javax.swing.JFrame {
         // Connection Handeler
         if ("login".equals(loginButton.getText())) {
             client = new Client("localhost");
-            client.setMyUserName(userNameField.getText());
-            System.out.println("Connection username:" + userNameField.getText());
-            boolean status = client.connect();
-            //Success full connection.
-            if (status) {
-                loginButton.setText("logout");
-                System.out.println("Login succesful");
-                userNameField.setVisible(false);
-                fly.setVisible(true);
-                client.connected=true;
-                client.start();
-                startViewer();
-            } //Failure to connect
-            else {
-                System.out.println("Connection failure; Username already used");
+            if (userNameField.getText().length() < 5) {
+                client.setMyUserName(userNameField.getText());
+                System.out.println("Connection username:" + userNameField.getText());
+                boolean status = client.connect();
+                //Success full connection.
+                if (status) {
+                    loginButton.setText("logout");
+                    System.out.println("Login succesful");
+                    userNameField.setVisible(false);
+                    fly.setVisible(true);
+                    client.connected = true;
+                    client.start();
+                    startViewer();
+                } //Failure to connect
+                else {
+                    System.out.println("Connection failure; Username already used");
+                    userNameField.setForeground(Color.red);
+                    userNameField.setText("username is used");
+                }
+            } else {
+                System.out.println("Connection failure; Username too long; only 5 letters");
                 userNameField.setForeground(Color.red);
-                userNameField.setText("username is used");
+                userNameField.setText("username to long");
+
             }
         } else {
             System.out.println("Disconnecting " + client.getMyUserName());
