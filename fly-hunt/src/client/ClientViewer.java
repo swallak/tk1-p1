@@ -31,6 +31,8 @@ public class ClientViewer extends javax.swing.JFrame {
 
     public ClientViewer() {
         initComponents();
+        myUserName.setVisible(false);
+        myscore.setVisible(false);
 
     }
 
@@ -50,6 +52,8 @@ public class ClientViewer extends javax.swing.JFrame {
         fly = new javax.swing.JLabel();
         gamersPanel = new javax.swing.JScrollPane();
         gamersTextArea = new javax.swing.JTextArea();
+        myUserName = new javax.swing.JLabel();
+        myscore = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -116,13 +120,18 @@ public class ClientViewer extends javax.swing.JFrame {
             .addGroup(playPanelLayout.createSequentialGroup()
                 .addGap(152, 152, 152)
                 .addComponent(fly)
-                .addContainerGap(216, Short.MAX_VALUE))
+                .addContainerGap(158, Short.MAX_VALUE))
         );
 
         gamersTextArea.setEditable(false);
         gamersTextArea.setColumns(10);
         gamersTextArea.setRows(5);
         gamersPanel.setViewportView(gamersTextArea);
+
+        myUserName.setText("jLabel1");
+
+        myscore.setForeground(new java.awt.Color(28, 139, 218));
+        myscore.setText("jLabel1");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -133,20 +142,34 @@ public class ClientViewer extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(connectPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(gamersPanel))
-                .addGap(10, 10, 10)
-                .addComponent(playPanel)
-                .addContainerGap())
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(playPanel)
+                        .addContainerGap())
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(myUserName)
+                        .addGap(18, 18, 18)
+                        .addComponent(myscore)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(playPanel)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
                         .addComponent(connectPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(gamersPanel)))
+                        .addComponent(gamersPanel))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(27, 27, 27)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(myUserName)
+                            .addComponent(myscore))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
+                        .addComponent(playPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
 
@@ -163,7 +186,7 @@ public class ClientViewer extends javax.swing.JFrame {
         // Connection Handeler
         if ("login".equals(loginButton.getText())) {
             client = new Client("localhost");
-            if (userNameField.getText().length() < 5) {
+            if (userNameField.getText().length() < 8) {
                 client.setMyUserName(userNameField.getText());
                 System.out.println("Connection username:" + userNameField.getText());
                 boolean status = client.connect();
@@ -174,6 +197,10 @@ public class ClientViewer extends javax.swing.JFrame {
                     userNameField.setVisible(false);
                     fly.setVisible(true);
                     client.connected = true;
+                    myUserName.setVisible(true);
+                    myscore.setVisible(true);
+                    myUserName.setText(client.getMyUserName());
+                    myscore.setText(new Integer(client.getMyScore()).toString());
                     client.start();
                     startViewer();
                 } //Failure to connect
@@ -199,7 +226,10 @@ public class ClientViewer extends javax.swing.JFrame {
                 loginButton.setText("login");
                 fly.setVisible(false);
                 gamersTextArea.setText("");
+                myUserName.setVisible(false);
+                myscore.setVisible(false);
                 client.stop();
+                updateGamersT.cancel();
                 //client = null;
             } else {
                 System.out.println("logout failed");
@@ -209,6 +239,7 @@ public class ClientViewer extends javax.swing.JFrame {
 
     private void flyMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_flyMousePressed
         client.huntFly();
+        myscore.setText(new Integer(client.getMyScore()).toString());
     }//GEN-LAST:event_flyMousePressed
 
     /**
@@ -247,15 +278,6 @@ public class ClientViewer extends javax.swing.JFrame {
 //        });
         ClientViewer viewer = new ClientViewer();
         viewer.setVisible(true);
-
-        
-        
-
-//        while (true) {
-//            Position pos = viewer.client.getFlyPosition();
-//            viewer.fly.setLocation(pos.getPosX() % viewer.playPanel.getWidth(), pos.getPosY() % viewer.playPanel.getHeight());
-//            System.out.println(pos);
-//        }
 
     }
     public void startViewer() {
@@ -301,6 +323,8 @@ public class ClientViewer extends javax.swing.JFrame {
     private javax.swing.JScrollPane gamersPanel;
     private javax.swing.JTextArea gamersTextArea;
     private javax.swing.JButton loginButton;
+    private javax.swing.JLabel myUserName;
+    private javax.swing.JLabel myscore;
     private javax.swing.JLayeredPane playPanel;
     private javax.swing.JTextField userNameField;
     // End of variables declaration//GEN-END:variables

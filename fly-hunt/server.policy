@@ -1,12 +1,4 @@
-grant codeBase "file:///home/swallak/Documents/TK1/Exercices/Practical/tk1-p1/fly-hunt/build/classes/" {
+grant codeBase "file:./build/classes/" {
     permission java.security.AllPermission;
 };
 
-/**
-java -cp build/classes/ -Djava.rmi.server.codebase=file:///home/swallak/Documents/TK1/Exercices/Practical/tk1-p1/fly-hunt/build/classes/ -Djava.rmi.server.hostname=localhost -Djava.security.debug=access,failure -Djava.security.policy=server.policy server.Server
-*/
-
-/*
-java -cp build/classes/ -Djava.rmi.server.codebase=file:///home/swallak/Documents/TK1/Exercices/Practical/tk1-p1/fly-hunt/build/classes/ -Djava.security.policy=server.policy client.Client
-
-*/
