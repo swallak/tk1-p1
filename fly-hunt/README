@@ -1,0 +1,33 @@
+TK1- PRACTICAL EXERCICE 1
+
+Group members:
+Saad Ouassil Allak : sw.allak@gmail.com (Mtr.Num: 2945765) 
+Syad Hasibul Hasan : syadhasibulhasan@gmail.com (Mtr.Num: 2248682)
+Rohit Jain         : Rohit.jain.server@gmail.com (Mtr.Num: 2512376)
+Manasvi Audichya   : mnsaudichya311@gmail.com   (Mtr.Num 2696221)
+
+
+How to:
+Step 1:
+    extract the zip file and go inside the fly-hunt directory 
+Step 2: 
+    Compile de the file using the command 
+        > ant -buildfile build.xml
+Step 3:
+    Launch the server using the following commands
+(It is important to make sure that rmiregistry is not running before launching server)
+        >chmod +x launch-server.sh
+        >./launch-server.sh
+Step 4:
+    Launch the client using the following commands
+        >chmod +x launch-client.sh
+        >./launch-client.sh
+
+
+Some remarks concerning the program: 
+    -Multiple client can be launched at a time using the launch-client.sh
+    -The fly changes position every second and a player can score multiple points
+    before it changes position
+    -7 is maximum number of characters for a user name
+    -The list of connected users get updated every 1500 ms.
+  
